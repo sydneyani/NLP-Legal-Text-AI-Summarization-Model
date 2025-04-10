@@ -1,0 +1,40 @@
+# Dataset folders
+UK-Abs/
+IN-Ext/
+IN-Abs/
+
+# Python virtual environment
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+ENV/
+
+# Model checkpoint files
+*.pt
+*.pth
+*.h5
+*.model
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
