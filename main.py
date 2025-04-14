@@ -93,10 +93,26 @@ def main():
     print("\nReference summary:")
     print(sample_ref_summary)
     
-    # For demonstration purposes, we'll only pretend to use the models
-    # (since they're not trained yet)
-    print("\nT5 generated summary would appear here in the final project")
-    print("\nBERTSUM extracted summary would appear here in the final project")
+    # Generate sample summaries with untrained models
+    if t5_summarizer is not None:
+        print("\nGenerating sample T5 summary (untrained model)...")
+        try:
+            t5_sample_summary = t5_summarizer.generate_summary(sample_doc)
+            print("T5 generated summary:")
+            print(t5_sample_summary)
+        except Exception as e:
+            print(f"Error generating T5 summary: {e}")
+            print("T5 generated summary would appear here in the final project")
+
+    if bertsum_extractor is not None:
+        print("\nGenerating sample BERTSUM summary...")
+        try:
+            bertsum_sample_summary = bertsum_extractor.generate_extractive_summary(sample_doc)
+            print("BERTSUM extracted summary:")
+            print(bertsum_sample_summary)
+        except Exception as e:
+            print(f"Error generating BERTSUM summary: {e}")
+            print("BERTSUM extracted summary would appear here in the final project")
     
     print("\nProject setup completed. Next steps:")
     print("1. Fine-tune the T5 model with the prepared training data")
