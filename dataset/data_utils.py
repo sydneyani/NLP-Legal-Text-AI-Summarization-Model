@@ -124,7 +124,7 @@ def preprocess_data(df):
 
 def analyze_dataset(df):
     """
-    Performs basic analysis on the dataset.
+    Performs basic analysis on the dataset and visualizes up to the 99th percentile.
     """
     # Document and summary lengths
     df['doc_length'] = df['document'].apply(len)
@@ -140,24 +140,40 @@ def analyze_dataset(df):
     print(f"Average summary sentences: {df['summary_sentences'].mean():.2f}")
     print(f"Compression ratio (summary/document): {(df['summary_length'] / df['doc_length']).mean():.4f}")
     
-    # Create distribution plots
+    # Calculate 99th percentile values for better visualization
+    doc_length_99 = np.percentile(df['doc_length'], 99)
+    summary_length_99 = np.percentile(df['summary_length'], 99)
+    doc_sentences_99 = np.percentile(df['doc_sentences'], 99)
+    summary_sentences_99 = np.percentile(df['summary_sentences'], 99)
+    
+    print("\n99th Percentile Values:")
+    print(f"Document length: {doc_length_99:.2f} chars")
+    print(f"Summary length: {summary_length_99:.2f} chars")
+    print(f"Document sentences: {doc_sentences_99:.2f}")
+    print(f"Summary sentences: {summary_sentences_99:.2f}")
+    
+    # Create distribution plots with truncated x-axes at 99th percentile
     try:
         fig, axs = plt.subplots(2, 2, figsize=(15, 10))
         
-        sns.histplot(df['doc_length'], bins=50, ax=axs[0, 0])
-        axs[0, 0].set_title('Document Length Distribution')
+        # Document length plot
+        sns.histplot(df[df['doc_length'] <= doc_length_99]['doc_length'], bins=50, ax=axs[0, 0])
+        axs[0, 0].set_title('Document Length Distribution (99th percentile)')
         axs[0, 0].set_xlabel('Character Count')
         
-        sns.histplot(df['summary_length'], bins=50, ax=axs[0, 1])
-        axs[0, 1].set_title('Summary Length Distribution')
+        # Summary length plot
+        sns.histplot(df[df['summary_length'] <= summary_length_99]['summary_length'], bins=50, ax=axs[0, 1])
+        axs[0, 1].set_title('Summary Length Distribution (99th percentile)')
         axs[0, 1].set_xlabel('Character Count')
         
-        sns.histplot(df['doc_sentences'], bins=30, ax=axs[1, 0])
-        axs[1, 0].set_title('Document Sentence Count Distribution')
+        # Document sentences plot
+        sns.histplot(df[df['doc_sentences'] <= doc_sentences_99]['doc_sentences'], bins=30, ax=axs[1, 0])
+        axs[1, 0].set_title('Document Sentence Count Distribution (99th percentile)')
         axs[1, 0].set_xlabel('Number of Sentences')
         
-        sns.histplot(df['summary_sentences'], bins=20, ax=axs[1, 1])
-        axs[1, 1].set_title('Summary Sentence Count Distribution')
+        # Summary sentences plot
+        sns.histplot(df[df['summary_sentences'] <= summary_sentences_99]['summary_sentences'], bins=20, ax=axs[1, 1])
+        axs[1, 1].set_title('Summary Sentence Count Distribution (99th percentile)')
         axs[1, 1].set_xlabel('Number of Sentences')
         
         plt.tight_layout()

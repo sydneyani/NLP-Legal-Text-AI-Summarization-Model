@@ -1,76 +1,148 @@
 # AI-Powered Legal Document Summarization
 
-## Team Members
-- Sydney Ani
-- Nicolas Osorio
+This project implements and compares two state-of-the-art approaches for legal document summarization:
+1. **T5-based Abstractive Summarization** (by Sydney Ani)
+2. **BERTSUM Extractive Summarization** (by Nicolas Osorio)
 
-## Introduction
-This repository contains our implementation of AI-powered legal document summarization techniques as part of the EDS 6397 Natural Language Processing course project. Our goal is to develop an effective system that can automatically generate concise and informative summaries of legal case documents.
-
-We explore both extractive and abstractive summarization approaches:
-- **Extractive Summarization (Nicolas Osorio)**: Using BERTSUM to identify and extract the most important sentences from legal documents.
-- **Abstractive Summarization (Sydney Ani)**: Fine-tuning T5 transformer models to generate human-like summaries that may include novel sentences not found in the original text.
-
-## Dataset
-We leverage the legal case summarization dataset from the paper "Legal Case Document Summarization: Extractive and Abstractive Methods and their Evaluation" accepted at AACL-IJCNLP 2022.
-
-The dataset includes:
-- **IN-Abs**: Indian Supreme Court case documents & their abstractive summaries
-- **IN-Ext**: Indian Supreme Court case documents & their extractive summaries
-- **UK-Abs**: United Kingdom Supreme Court case documents & their abstractive summaries
-
-For detailed information about the dataset structure and statistics, please see the [dataset/README.md](dataset/README.md) file.
-
-## Key Features
-- Data processing pipeline for complex nested folder structure
-- Custom dataset classes for legal documents
-- T5-based abstractive summarization implementation
-- BERTSUM-based extractive summarization implementation
-- Evaluation framework using ROUGE and BLEU metrics
-
-## Current Progress
-- Successfully loaded and processed 7,823 document-summary pairs
-- Implemented data preprocessing and analysis
-- Set up model architectures for both approaches:
-  - T5 model for abstractive summarization
-  - BERTSUM model for extractive summarization
-- Established training and evaluation pipelines
-
-## Dataset Statistics
-- **Total samples**: 7,823 document-summary pairs
-- **Average document length**: 30,339.68 characters (~190 sentences)
-- **Average summary length**: 4,996.06 characters (~33 sentences)
-- **Compression ratio**: 22.52% (summary/document length)
+The project evaluates both approaches on legal documents and compares their performance using ROUGE and BLEU metrics.
 
 ## Project Structure
+
 ```
-NLP-Legal-Text-AI-Summarization-Model/
-├── abstractive/           # Sydney's T5-based abstractive summarization
-├── dataset/               # Dataset folder and utilities
-├── extractive/            # Nicolas's BERTSUM extractive summarization
-├── utilities/             # Shared utility scripts
-├── evaluation.py          # Evaluation metrics and functions
-├── main.py                # Main execution script
-└── README.md              # This file
-```
-
-## Future Work
-- Complete model training for both approaches
-- Implement comprehensive evaluation using ROUGE and BLEU
-- Optimize hyperparameters for legal document domain
-- Compare effectiveness of extractive vs. abstractive approaches
-
-## Citation
-If you use the dataset in your work, please cite the original papers:
-
-```bibtex
-@inproceedings{shukla2022,
-  title={Legal Case Document Summarization: Extractive and Abstractive Methods and their Evaluation},
-  author={Shukla, Abhay and Bhattacharya, Paheli and Poddar, Soham and Mukherjee, Rajdeep and Ghosh, Kripabandhu and Goyal, Pawan and Ghosh, Saptarshi},
-  booktitle={The 2nd Conference of the Asia-Pacific Chapter of the Association for Computational Linguistics and the 12th International Joint Conference on Natural Language Processing},
-  year={2022}
-}
+├── abstractive/
+│   └── t5_summarizer.py       # T5-based abstractive summarization model
+├── dataset/
+│   └── data_utils.py          # Data loading and preprocessing utilities
+├── extractive/
+│   └── bertsum_extractor.py   # BERTSUM extractive summarization model
+├── evaluation.py              # Evaluation metrics for summarization
+├── main.py                    # Main script to run the project
+├── outputs/                   # Output directory for models and results
+└── README.md                  # This file
 ```
 
-## Acknowledgements
-We would like to thank the authors of the original dataset for making it publicly available.
+## Installation
+
+1. Clone this repository
+2. Install the required packages:
+```bash
+pip install transformers torch nltk pandas numpy matplotlib seaborn scikit-learn rouge-score tqdm
+```
+3. Download the NLTK punkt tokenizer:
+```python
+import nltk
+nltk.download('punkt')
+```
+
+## Evaluation Metrics
+
+The project evaluates summarization quality using the following metrics:
+
+1. **ROUGE (Recall-Oriented Understudy for Gisting Evaluation)**
+   - ROUGE-1: Overlap of unigrams between generated and reference summaries
+   - ROUGE-2: Overlap of bigrams between generated and reference summaries
+   - ROUGE-L: Longest Common Subsequence between generated and reference summaries
+
+2. **BLEU (Bilingual Evaluation Understudy)**
+   - Measures n-gram precision between generated and reference summaries
+   - Includes scores for different n-gram sizes (BLEU-1, BLEU-2, BLEU-3, BLEU-4)
+
+The evaluation results are saved in the output directory as a text file and visualized in a comparison chart.
+
+### Examples
+
+Training both models with 5 epochs and saving the results:
+```bash
+python main.py --mode both --epochs 5 --batch_size 8 --save_models
+```
+
+Training only the T5 model:
+```bash
+python main.py --mode t5 --epochs 3
+```
+
+Evaluating pre-trained models:
+```bash
+python main.py --eval_only
+```
+
+Running in interactive mode after training:
+```bash
+python main.py --epochs 1 --interactive
+```
+
+## Dataset
+
+The project expects legal document data in the following folder structure:
+```
+├── UK-Abs/
+│   └── case1/
+│       ├── judgement/
+│       │   └── document1.txt
+│       └── summary/
+│           └── document1.txt
+├── IN-Ext/
+│   └── ...
+└── IN-Abs/
+    └── ...
+```
+
+If the dataset is not available, the system will automatically use sample data for demonstration purposes.
+
+## Model Descriptions
+
+### T5 Abstractive Summarization
+
+The T5 (Text-to-Text Transfer Transformer) model treats summarization as a text-to-text task, where the input is a document prefixed with "summarize: " and the output is the summary. Key features:
+
+- Uses the T5 pre-trained model from Hugging Face
+- Fine-tuned on legal documents
+- Generates abstractive summaries that may contain novel phrases not in the original text
+- Trained with teacher forcing for sequence-to-sequence learning
+
+### BERTSUM Extractive Summarization
+
+The BERTSUM model treats summarization as a sentence classification task, where each sentence is either included in the summary or not. Key features:
+
+- Uses BERT for sentence encoding
+- Adds a simple classification layer for sentence importance scoring
+- Extracts the most important sentences based on their predicted scores
+- Maintains the original wording of the document
+- Uses ROUGE scores against reference summaries for training data preparation
+
+## Usage
+
+### Basic Usage
+
+Run the main script:
+```bash
+python main.py
+```
+
+This will:
+1. Load and analyze the dataset
+2. Preprocess the data
+3. Initialize the summarization models
+4. Train the models
+5. Evaluate and compare the models
+6. Display sample summaries
+7. Save detailed evaluation results and model comparisons
+
+### Command Line Arguments
+
+The script accepts several command line arguments:
+
+```bash
+python main.py --mode both --epochs 3 --batch_size 8 --output_dir outputs --sample_data
+```
+
+- `--mode`: Choose which model to train/evaluate: `t5`, `bertsum`, or `both` (default: `both`)
+- `--epochs`: Number of training epochs (default: 3)
+- `--batch_size`: Batch size for training (default: 8)
+- `--t5_model`: T5 model name to use (default: 't5-base')
+- `--bert_model`: BERT model name to use (default: 'bert-base-uncased')
+- `--output_dir`: Directory to save models and results (default: 'outputs')
+- `--sample_data`: Use sample data instead of loading the real dataset
+- `--eval_only`: Skip training and only evaluate
+- `--save_models`: Save trained models to disk
+- `--interactive`: Run an interactive demo after training/evaluation
