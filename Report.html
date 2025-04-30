@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Document Summarization Using Neural Approaches: A Comparative Study</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.2;
+            margin: 0;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .container {
+            max-width: 7.5in;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 0.5in;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 24pt;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .authors {
+            font-size: 12pt;
+            margin-bottom: 10px;
+        }
+
+        .affiliation {
+            font-size: 10pt;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .abstract-container {
+            margin-bottom: 20px;
+        }
+
+        .abstract-title {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .abstract {
+            text-align: justify;
+        }
+
+        .keywords {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            text-align: justify;
+        }
+
+        h1 {
+            font-size: 10pt;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 10pt;
+            font-style: italic;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            break-inside: avoid;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        .figure {
+            text-align: center;
+            margin: 15px 0;
+            break-inside: avoid;
+        }
+
+        .figure-caption {
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .reference-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .reference-list li {
+            padding-left: 20px;
+            text-indent: -20px;
+            margin-bottom: 5px;
+        }
+
+        .page-number {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 9pt;
+        }
+
+        .table-container, .figure-container {
+            break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">Legal Document Summarization Using Neural Approaches: A Comparative Study</div>
+            <div class="authors">Sydney Ani, Nicolas Osorio</div>
+            <div class="affiliation">Department of Engineering Data Science, University of Houston<br>
+            Houston, Texas, USA<br>
+            Siani@cougarnet.uh.edu, Nosorio@cougarnet.uh.edu</div>
+        </div>
+
+        <div class="abstract-container">
+            <span class="abstract-title">Abstract—</span>
+            <span class="abstract">This paper studies how to automatically summarize legal documents using neural networks. We tested two popular models: a T5 model (which creates new summary text) and a BERTSum model (which selects key sentences from the document). We tested these models on many legal documents from the UK and India. Our results show that both models can summarize complicated legal documents, but with different results. The T5 model scored 0.2173 on the ROUGE-1 F1 metric, while BERTSum scored 0.3142. We look at these numbers and also compare the actual summaries to understand how well these models handle legal language, which often has special terms and complex sentences.</span>
+        </div>
+
+        <div class="keywords">
+            <i>Keywords—</i> legal document summarization, neural networks, abstractive summarization, extractive summarization, T5, BERT, natural language processing
+        </div>
+
+        <div class="content">
+            <h1>I. Introduction</h1>
+            <p>Automatic document summarization is an important task in natural language processing (NLP) that creates shorter versions of documents while keeping the main information [1]. This is especially useful for legal documents, which are often very long and complicated. Lawyers and other legal professionals have to read many long documents like court cases, contracts, and legal opinions [2]. It takes a lot of time to summarize these by hand, so there's a real need for automated systems that can help.</p>
+            
+            <p>Legal documents are harder to summarize than regular text. They use special legal terms, have complex sentences, and require specific knowledge to understand properly [3]. Also, legal summaries must be very accurate because mistakes could cause serious problems in legal work.</p>
+            
+            <p>Recently, neural networks have been getting better at summarizing text [4], [5]. There are two main types of summarization: extractive and abstractive. Extractive summarization picks out important sentences from the document and puts them together. Abstractive summarization creates new sentences that capture the main ideas of the document [6].</p>
+            
+            <p>Past research has tried different ways to summarize legal documents. Hachey and Grover [7] used statistical methods, while Polsley et al. [8] focused on finding important sentences in legal opinions. More recently, researchers started using neural network models for legal text summarization [9], [10].</p>
+            
+            <p>In this paper, we test two modern neural network approaches on legal document summarization: a T5-based abstractive model and a BERT-based extractive model (BERTSum). We test these models on many legal documents from the UK and India, and we look at both the numbers (metrics) and the actual summaries to see how well they work.</p>
+            
+            <p>Our main contributions are:</p>
+            <ol>
+                <li>Comparing abstractive and extractive approaches for summarizing legal documents</li>
+                <li>Testing model performance on a large collection of legal documents</li>
+                <li>Identifying what these models do well and where they struggle with legal text</li>
+                <li>Suggesting ways to improve legal summarization in the future</li>
+            </ol>
+            
+            <h1>II. Dataset</h1>
+            <h2>A. Data Sources and Composition</h2>
+            <p>Our dataset consists of 7,823 document-summary pairs of legal texts collected from multiple jurisdictions, primarily focusing on UK and Indian legal systems. The dataset is organized into three main categories:</p>
+            <ul>
+                <li>UK-Abs: UK legal documents with abstractive summaries</li>
+                <li>IN-Ext: Indian legal documents with extractive summaries</li>
+                <li>IN-Abs: Indian legal documents with abstractive summaries</li>
+            </ul>
+            
+            <p>The documents primarily consist of court judgments, legal opinions, and case laws. Each document is paired with a professionally written summary that captures the essential legal points, reasoning, and decisions. These gold-standard summaries serve as the reference against which we evaluate our models' outputs.</p>
+            
+            <h2>B. Dataset Statistics</h2>
+            <p>We conducted a comprehensive analysis of the dataset to understand its characteristics. Table I presents the key statistical properties of our dataset.</p>
+            
+            <div class="table-container">
+                <table>
+                    <caption>TABLE I: DATASET STATISTICS</caption>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Total samples</td>
+                        <td>7,823</td>
+                    </tr>
+                    <tr>
+                        <td>Average document length (characters)</td>
+                        <td>30,339.68</td>
+                    </tr>
+                    <tr>
+                        <td>Average summary length (characters)</td>
+                        <td>4,996.06</td>
+                    </tr>
+                    <tr>
+                        <td>Average document sentences</td>
+                        <td>190.04</td>
+                    </tr>
+                    <tr>
+                        <td>Average summary sentences</td>
+                        <td>32.91</td>
+                    </tr>
+                    <tr>
+                        <td>Compression ratio (summary/document)</td>
+                        <td>0.2252</td>
+                    </tr>
+                    <tr>
+                        <td>99th percentile document length</td>
+                        <td>190,528.94 chars</td>
+                    </tr>
+                    <tr>
+                        <td>99th percentile summary length</td>
+                        <td>23,997.72 chars</td>
+                    </tr>
+                    <tr>
+                        <td>99th percentile document sentences</td>
+                        <td>1,099.12</td>
+                    </tr>
+                    <tr>
+                        <td>99th percentile summary sentences</td>
+                        <td>149.00</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <p>The dataset exhibits considerable variation in document and summary lengths, reflecting the diversity of legal texts. The average compression ratio of approximately 0.225 indicates that summaries are typically about one-fifth the length of the original documents. This substantial compression highlights the challenging nature of the task, as models must identify and preserve the most critical legal information while significantly reducing text volume.</p>
+            
+            <h2>C. Data Preprocessing and Splitting</h2>
+            <p>We preprocessed the data following standard NLP practices. This included:</p>
+            <ol>
+                <li>Cleaning and normalizing text (removing extra whitespaces, standardizing quotation marks)</li>
+                <li>Sentence segmentation using NLTK's punkt tokenizer</li>
+                <li>Handling specific legal formatting conventions and citations</li>
+            </ol>
+            
+            <p>The dataset was split into train, validation, and test sets using an 80-10-10 ratio, resulting in 6,256 training examples, 782 validation examples, and 783 test examples. We ensured that the distribution of document types and jurisdictions remained consistent across these splits to enable fair evaluation.</p>
+            
+            <h1>III. Methodology</h1>
+            <p>We implemented and compared two neural network approaches for legal document summarization: a T5-based abstractive model and a BERT-based extractive model (BERTSum). Figure 1 illustrates the overall architecture of our approach.</p>
+            
+            <div class="figure-container">
+                <div class="figure">
+                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="0" y="0" width="800" height="400" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">Legal Document Summarization System Architecture</text>
+  
+  <!-- Input Document Box -->
+  <rect x="50" y="70" width="200" height="80" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" rx="5" ry="5" />
+  <text x="150" y="115" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Legal Documents</text>
+  
+  <!-- Data Processing Box -->
+  <rect x="300" y="70" width="200" height="80" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" rx="5" ry="5" />
+  <text x="400" y="105" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Preprocessing</text>
+  <text x="400" y="130" font-family="Arial" font-size="14" text-anchor="middle">Cleaning, Tokenization</text>
+  
+  <!-- Flow Arrows -->
+  <line x1="250" y1="110" x2="300" y2="110" stroke="#000" stroke-width="2" />
+  <polygon points="295,105 305,110 295,115" fill="#000" />
+  
+  <line x1="400" y1="150" x2="400" y2="190" stroke="#000" stroke-width="2" />
+  <polygon points="395,185 400,195 405,185" fill="#000" />
+  
+  <!-- Model Branch Box -->
+  <rect x="300" y="190" width="200" height="40" fill="#fff3e0" stroke="#e65100" stroke-width="2" rx="5" ry="5" />
+  <text x="400" y="215" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Model Selection</text>
+  
+  <!-- Branch Lines -->
+  <line x1="300" y1="230" x2="250" y2="260" stroke="#000" stroke-width="2" />
+  <polygon points="255,255 245,265 250,250" fill="#000" />
+  
+  <line x1="500" y1="230" x2="550" y2="260" stroke="#000" stroke-width="2" />
+  <polygon points="545,255 555,265 550,250" fill="#000" />
+  
+  <!-- T5 Model Box -->
+  <rect x="150" y="260" width="200" height="80" fill="#e8eaf6" stroke="#3949ab" stroke-width="2" rx="5" ry="5" />
+  <text x="250" y="290" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">T5 Model</text>
+  <text x="250" y="315" font-family="Arial" font-size="14" text-anchor="middle">Abstractive Summarization</text>
+  
+  <!-- BERTSum Model Box -->
+  <rect x="450" y="260" width="200" height="80" fill="#fce4ec" stroke="#c2185b" stroke-width="2" rx="5" ry="5" />
+  <text x="550" y="290" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">BERTSum Model</text>
+  <text x="550" y="315" font-family="Arial" font-size="14" text-anchor="middle">Extractive Summarization</text>
+  
+  <!-- Flow Arrows to Output -->
+  <line x1="250" y1="340" x2="350" y2="370" stroke="#000" stroke-width="2" />
+  <polygon points="345,365 355,375 350,360" fill="#000" />
+  
+  <line x1="550" y1="340" x2="450" y2="370" stroke="#000" stroke-width="2" />
+  <polygon points="455,365 445,375 450,360" fill="#000" />
+  
+  <!-- Output Box -->
+  <rect x="300" y="370" width="200" height="60" fill="#ede7f6" stroke="#4527a0" stroke-width="2" rx="5" ry="5" />
+  <text x="400" y="395" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Evaluation</text>
+  <text x="400" y="415" font-family="Arial" font-size="14" text-anchor="middle">ROUGE, BLEU, BERTScore</text>
+</svg>
+                    <div class="figure-caption">Fig. 1. Overall architecture of the legal document summarization system, showing data flow through both T5 abstractive and BERTSum extractive models.</div>
+                </div>
+            </div>
+            
+            <h2>A. T5 Abstractive Summarization</h2>
+            <p>The T5 (Text-to-Text Transfer Transformer) model was created by Raffel et al. [11]. It treats all language tasks as "text-to-text" problems. This makes it good for abstractive summarization, where it creates summaries using its own words rather than just copying from the document.</p>
+            
+            <h3>1) Model Architecture</h3>
+            <p>We used the T5-base model, which has about 220 million parameters. It has an encoder-decoder structure based on the transformer architecture [12]. The encoder reads the input document, and the decoder generates the summary.</p>
+            
+            <p>T5 is pre-trained on lots of different texts, which helps it understand language patterns. We then fine-tuned it specifically on our legal document dataset.</p>
+            
+            <h3>2) Training Details</h3>
+            <p>We fine-tuned the T5-base model with these settings:</p>
+            <ul>
+                <li>Learning rate: 5e-5 with linear decay</li>
+                <li>Batch size: 8</li>
+                <li>Maximum input length: 1024 tokens</li>
+                <li>Maximum output length: 256 tokens</li>
+                <li>Optimizer: AdamW</li>
+                <li>Training epochs: 3</li>
+            </ul>
+            
+            <p>During training, we used "teacher forcing" - a technique where the model sees the correct previous word while predicting the next word. This helps the model learn more efficiently.</p>
+            
+            <h2>B. BERTSum Extractive Summarization</h2>
+            <p>For our extractive approach, we used BERTSum, which was developed by Liu [13]. This model builds on BERT to select the most important sentences from a document.</p>
+            
+            <h3>1) Model Architecture</h3>
+            <p>BERTSum adapts the BERT architecture specifically for document summarization. It adds special embeddings to tell different sentences apart and includes extra layers to understand how sentences relate to each other in a document.</p
+            
+            <h1>IV. Results</h1>
+            <p>We evaluated both models on the test set of 783 document-summary pairs. Table II presents the performance of the T5 abstractive model and the BERTSum extractive model across all evaluation metrics.</p>
+            
+            <div class="table-container">
+                <table>
+                    <caption>TABLE II: PERFORMANCE COMPARISON OF SUMMARIZATION MODELS</caption>
+                    <tr>
+                        <th>Metric</th>
+                        <th>T5 Abstractive</th>
+                        <th>BERTSum Extractive</th>
+                    </tr>
+                    <tr>
+                        <td>ROUGE-1 F1</td>
+                        <td>0.2173</td>
+                        <td>0.3142</td>
+                    </tr>
+                    <tr>
+                        <td>ROUGE-2 F1</td>
+                        <td>0.1079</td>
+                        <td>0.1654</td>
+                    </tr>
+                    <tr>
+                        <td>ROUGE-L F1</td>
+                        <td>0.1450</td>
+                        <td>0.2475</td>
+                    </tr>
+                    <tr>
+                        <td>BLEU-1</td>
+                        <td>0.0361</td>
+                        <td>0.1028</td>
+                    </tr>
+                    <tr>
+                        <td>BLEU-4</td>
+                        <td>0.0120</td>
+                        <td>0.0342</td>
+                    </tr>
+                    <tr>
+                        <td>BERTScore F1</td>
+                        <td>0.0095</td>
+                        <td>0.1125</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <p>The results show that the BERTSum extractive model outperforms the T5 abstractive model across all metrics. This difference is particularly pronounced for ROUGE-1 (0.3142 vs. 0.2173) and ROUGE-L (0.2475 vs. 0.1450).</p>
+            
+            <div class="figure-container">
+                <div class="figure">
+                    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="0" y="0" width="800" height="400" fill="#f8f9fa" rx="10" ry="10" />
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">Performance Comparison of Summarization Models</text>
+  
+  <!-- Y-axis -->
+  <line x1="100" y1="350" x2="100" y2="50" stroke="#333" stroke-width="2" />
+  <!-- Y-axis ticks and labels -->
+  <line x1="95" y1="350" x2="100" y2="350" stroke="#333" stroke-width="2" />
+  <text x="80" y="355" font-family="Arial" font-size="12" text-anchor="end">0.0</text>
+  
+  <line x1="95" y1="290" x2="100" y2="290" stroke="#333" stroke-width="2" />
+  <text x="80" y="295" font-family="Arial" font-size="12" text-anchor="end">0.1</text>
+  
+  <line x1="95" y1="230" x2="100" y2="230" stroke="#333" stroke-width="2" />
+  <text x="80" y="235" font-family="Arial" font-size="12" text-anchor="end">0.2</text>
+  
+  <line x1="95" y1="170" x2="100" y2="170" stroke="#333" stroke-width="2" />
+  <text x="80" y="175" font-family="Arial" font-size="12" text-anchor="end">0.3</text>
+  
+  <line x1="95" y1="110" x2="100" y2="110" stroke="#333" stroke-width="2" />
+  <text x="80" y="115" font-family="Arial" font-size="12" text-anchor="end">0.4</text>
+  
+  <line x1="95" y1="50" x2="100" y2="50" stroke="#333" stroke-width="2" />
+  <text x="80" y="55" font-family="Arial" font-size="12" text-anchor="end">0.5</text>
+  
+  <!-- X-axis -->
+  <line x1="100" y1="350" x2="750" y2="350" stroke="#333" stroke-width="2" />
+  
+  <!-- X-axis labels -->
+  <text x="175" y="375" font-family="Arial" font-size="12" text-anchor="middle">ROUGE-1</text>
+  <text x="300" y="375" font-family="Arial" font-size="12" text-anchor="middle">ROUGE-2</text>
+  <text x="425" y="375" font-family="Arial" font-size="12" text-anchor="middle">ROUGE-L</text>
+  <text x="550" y="375" font-family="Arial" font-size="12" text-anchor="middle">BLEU-4</text>
+  <text x="675" y="375" font-family="Arial" font-size="12" text-anchor="middle">BERTScore</text>
+  
+  <!-- Grid lines (horizontal, optional) -->
+  <line x1="100" y1="290" x2="750" y2="290" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5" />
+  <line x1="100" y1="230" x2="750" y2="230" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5" />
+  <line x1="100" y1="170" x2="750" y2="170" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5" />
+  <line x1="100" y1="110" x2="750" y2="110" stroke="#ddd" stroke-width="1" stroke-dasharray="5,5" />
+  
+  <!-- Data Points -->
+  <!-- ROUGE-1 -->
+  <circle cx="175" cy="217" r="6" fill="#4285f4" />
+  <text x="175" y="207" font-family="Arial" font-size="10" text-anchor="middle">0.217</text>
+  
+  <circle cx="175" cy="158" r="6" fill="#ea4335" />
+  <text x="175" y="148" font-family="Arial" font-size="10" text-anchor="middle">0.314</text>
+  
+  <!-- ROUGE-2 -->
+  <circle cx="300" cy="284" r="6" fill="#4285f4" />
+  <text x="300" y="274" font-family="Arial" font-size="10" text-anchor="middle">0.108</text>
+  
+  <circle cx="300" cy="249" r="6" fill="#ea4335" />
+  <text x="300" y="239" font-family="Arial" font-size="10" text-anchor="middle">0.165</text>
+  
+  <!-- ROUGE-L -->
+  <circle cx="425" cy="261" r="6" fill="#4285f4" />
+  <text x="425" y="251" font-family="Arial" font-size="10" text-anchor="middle">0.145</text>
+  
+  <circle cx="425" cy="196" r="6" fill="#ea4335" />
+  <text x="425" y="186" font-family="Arial" font-size="10" text-anchor="middle">0.248</text>
+  
+  <!-- BLEU-4 -->
+  <circle cx="550" cy="343" r="6" fill="#4285f4" />
+  <text x="550" y="333" font-family="Arial" font-size="10" text-anchor="middle">0.012</text>
+  
+  <circle cx="550" cy="328" r="6" fill="#ea4335" />
+  <text x="550" y="318" font-family="Arial" font-size="10" text-anchor="middle">0.034</text>
+  
+  <!-- BERTScore -->
+  <circle cx="675" cy="344" r="6" fill="#4285f4" />
+  <text x="675" y="334" font-family="Arial" font-size="10" text-anchor="middle">0.010</text>
+  
+  <circle cx="675" cy="281" r="6" fill="#ea4335" />
+  <text x="675" y="271" font-family="Arial" font-size="10" text-anchor="middle">0.113</text>
+  
+  <!-- Legend -->
+  <circle cx="307" cy="387" r="6" fill="#4285f4" />
+  <text x="320" y="392" font-family="Arial" font-size="14" text-anchor="start">T5 Abstractive</text>
+  
+  <circle cx="457" cy="387" r="6" fill="#ea4335" />
+  <text x="470" y="392" font-family="Arial" font-size="14" text-anchor="start">BERTSum Extractive</text>
+  
+  <!-- Y-axis label -->
+  <text x="40" y="200" font-family="Arial" font-size="14" text-anchor="middle" transform="rotate(-90, 40, 200)">F1 Score</text>
+</svg>
+                    <div class="figure-caption">Fig. 2. Comparison of performance metrics between T5 Abstractive and BERTSum Extractive models.</div>
+                </div>
+            </div>
+            
+            <h2>A. Qualitative Analysis</h2>
+            <p>Beyond quantitative metrics, we conducted a qualitative analysis of the summaries generated by both models. Table III provides an example document excerpt and the corresponding summaries.</p>
+            
+            <div class="table-container">
+                <table>
+                    <caption>TABLE III: EXAMPLE SUMMARIES GENERATED BY BOTH MODELS</caption>
+                    <tr>
+                        <th>Source</th>
+                        <th>Text</th>
+                    </tr>
+                    <tr>
+                        <td>Original Document (excerpt)</td>
+                        <td>"Appeal No. 1313 of 1973. (From the Judgment and Order dated 7 9 1972 of the Calcutta High Court in Income Tax Reference No. 208 of 1966). V.P. Raman, Addl. Solicitor Genl. and M.N. Shroff for the Appellant. K. Ray and D.N. Gupta, for the Respondent. The Judgment of the Court was delivered by KHANNA,..."</td>
+                    </tr>
+                    <tr>
+                        <td>Reference Summary (excerpt)</td>
+                        <td>"Section 42, Income tax Act, 1922, provides for assessing the income, profits gains deemed to accrue or arise in the taxable territories to a person not resident in the taxable territories. RuLe 33 of the 1922 Rules is made for comput ing the profits and gains of business deemed to accrue or arise in India in cases where the income tax officer finds that the provisions of section 42 do not provide sufficient criteria..."</td>
+                    </tr>
+                    <tr>
+                        <td>T5 Abstractive Summary</td>
+                        <td>"The assessee was a non resident company carrying on business as construc tion engineers. The Income tax Officer made the original assessment on May 31, 1960 on a total income of Rs. 21,49,169. On November 5, 1962 the Income tax Officer initiated proceedings under section 147(b) of the Income tax Act, 1961 and completed the assessment on February 29, 1964 on a total income of Rs. 69,85,097..."</td>
+                    </tr>
+                    <tr>
+                        <td>BERTSum Extractive Summary</td>
+                        <td>"Section 42, Income tax Act, 1922, provides for assessing the income, profits gains deemed to accrue or arise in the taxable territories to a person not resident in the taxable territories. The assessee respondent in the present case, is a non resident company carrying on business as construction engi neers both in India and in other parts of the world. The Income Tax Officer ordering reassessment does not sit as a Court of appeal over the officer making the original assessment..."</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <p>Our qualitative analysis revealed several patterns:</p>
+            
+            <ol>
+                <li>The T5 abstractive model often generated summaries with factual details that weren't explicitly mentioned in the reference summary but were present in the original document. This included specific dates, monetary amounts, and procedural details.</li>
+                <li>The BERTSum extractive model tended to select sentences that contained legal principles and reasoning, which aligned better with the reference summaries that focused on legal doctrines rather than case-specific details.</li>
+                <li>Both models struggled with very long documents, often focusing disproportionately on the beginning and end sections while potentially missing important information in the middle.</li>
+                <li>The abstractive model occasionally introduced factual inconsistencies, particularly when summarizing complex legal reasoning or when numerical values were involved.</li>
+            </ol>
+            
+            <h1>V. Discussion</h1>
+            <h2>A. Interpretation of Results</h2>
+            <p>The quantitative results show that the BERTSum extractive model outperformed the T5 abstractive model across all evaluation metrics. This finding contradicts some prior research in general domain summarization, where abstractive models often achieve competitive or superior results [17]. Several factors may explain this disparity in the legal domain:</p>
+            
+            <ol>
+                <li>Legal language is highly specialized and formulaic, with specific phrasings carrying precise meanings. Extractive approaches that preserve original text may better maintain these nuances than abstractive approaches that rephrase content.</li>
+                <li>Legal documents often contain critical citations, statutes, and case references that must be precisely preserved. Extractive models naturally retain these elements, while abstractive models may paraphrase or omit them.</li>
+                <li>The reference summaries in our dataset, though classified as abstractive, often contain substantial direct quotations from the original documents, particularly for key legal principles and holdings. This favors extractive approaches in metric-based evaluations.</li>
+            </ol>
+            
+            <p>The relatively low performance on BERTScore for both models (0.0095 for T5 and 0.1125 for BERTSum) suggests that the models struggle to capture the semantic meaning of legal texts at a deeper level. This indicates room for improvement in domain-specific understanding.</p>
+            
+            <h2>B. Challenges and Limitations</h2>
+            <p>Our study revealed several challenges specific to legal document summarization:</p>
+            
+            <ol>
+                <li>Document Length: Legal documents are typically much longer than the input capacity of transformer-based models (often limited to 512 or 1024 tokens). Our sliding window approach, while functional, may not fully capture cross-document relationships and references.</li>
+                <li>Legal Terminology: Both models occasionally misinterpreted specialized legal terminology or failed to recognize the significance of specific legal concepts, resulting in summaries that missed key legal points.</li>
+                <li>Structural Complexity: Legal documents often have complex structures with interdependent sections (e.g., facts, arguments, analysis, holding). Current models do not explicitly model these structural elements, which may limit their effectiveness.</li>
+                <li>Evaluation Metrics: Standard NLP evaluation metrics like ROUGE may not fully capture the quality of legal summaries, where precision in legal reasoning and accuracy of legal principles are paramount but not directly measured.</li>
+            </ol>
+            
+            <h2>C. Implications and Future Directions</h2>
+            <p>Based on our findings, we propose several directions for future research in legal document summarization:</p>
+            
+            <ol>
+                <li>Domain-Specific Pre-training: Further pre-training of language models on legal corpora could enhance their understanding of legal terminology and reasoning patterns.</li>
+                <li>Hybrid Approaches: Combining extractive and abstractive methods may leverage the strengths of both approaches—extractive for preserving critical legal language and abstractive for condensing standard procedural elements.</li>
+                <li>Structure-Aware Models: Developing models that explicitly account for the structural elements of legal documents (e.g., facts, procedural history, legal analysis, holding) could improve summarization quality.</li>
+                <li>Legal-Specific Evaluation Metrics: Creating evaluation frameworks that assess not only textual similarity but also legal accuracy, completeness of legal reasoning, and identification of precedential value would better reflect the requirements of legal summarization.</li>
+                <li>Larger Context Windows: As transformer models with longer context windows become available (e.g., Longformer [18], Big Bird [19]), they should be evaluated on legal summarization to better handle the length of typical legal documents.</li>
+            </ol>
+            
+            <h1>VI. Conclusion</h1>
+            <p>This paper presented a comparative study of abstractive and extractive approaches for legal document summarization using T5 and BERTSum models. Our evaluation on a dataset of 7,823 legal documents showed that the extractive approach outperformed the abstractive approach across standard NLP metrics in the legal domain.</p>
+            
+            <p>We identified several challenges specific to legal summarization, including document length, specialized terminology, and structural complexity. Our qualitative analysis revealed that while abstractive models can generate coherent summaries, they sometimes introduce factual inconsistencies or miss critical legal principles that extractive approaches preserve.</p>
+            
+            <p>The findings suggest that current neural summarization approaches, while promising, require further adaptation to meet the specific demands of the legal domain. Future work should focus on developing domain-specific models, hybrid approaches, and evaluation metrics that better align with the requirements of legal professionals.</p>
+            
+            <p>Legal document summarization remains a challenging but valuable application of NLP techniques, with significant potential to improve efficiency in legal research, case preparation, and legal education. Continued research in this area promises to create more effective tools for legal professionals while advancing the capabilities of summarization systems more broadly.</p>
+            
+            <h1>References</h1>
+            <ol class="reference-list">
+                <li>[1] A. Nenkova and K. McKeown, "A survey of text summarization techniques," in <i>Mining Text Data</i>. Springer, 2012, pp. 43–76.</li>
+                <li>[2] K. Raghav, P. Reddy, and V. Reddy, "Analyzing the extraction of relevant legal judgments using paragraph-level and citation information," <i>AI Access</i>, vol. 33, 2016.</li>
+                <li>[3] M. Saravanan, B. Ravindran, and S. Raman, "Improving legal document summarization using graphical models," in <i>Proceedings of JURIX 2006</i>, 2006, pp. 51–60.</li>
+                <li>[4] A. See, P. Liu, and C. Manning, "Get to the point: Summarization with pointer-generator networks," in <i>Proceedings of ACL</i>, 2017, pp. 1073–1083.</li>
+                <li>[5] J. Zhang, Y. Zhao, M. Saleh, and P. Liu, "PEGASUS: Pre-training with extracted gap-sentences for abstractive summarization," in <i>Proceedings of ICML</i>, 2020, pp. 11328–11339.</li>
+                <li>[6] H. Zheng and M. Lapata, "Sentence centrality revisited for unsupervised summarization," in <i>Proceedings of ACL</i>, 2019, pp. 6236–6247.</li>
+                <li>[7] B. Hachey and C. Grover, "Extractive summarisation of legal texts," <i>Artificial Intelligence and Law</i>, vol. 14, no. 4, pp. 305–345, 2006.</li>
+                <li>[8] S. Polsley, P. Jhunjhunwala, and R. Huang, "CaseSummarizer: A system for automated summarization of legal texts," in <i>Proceedings of COLING 2016</i>, 2016, pp. 258–262.</li>
+                <li>[9] G. Shang et al., "Unsupervised abstractive meeting summarization with multi-sentence compression and budgeted submodular maximization," in <i>Proceedings of ACL</i>, 2018, pp. 664–674.</li>
+                <li>[10] V. Bhattacharya, K. Ghosh, S. Ghosh, and A. Pal, "Methods for computing legal document similarity: A comparative study," <i>arXiv preprint arXiv:2104.05570</i>, 2021.</li>
+                <li>[11] C. Raffel et al., "Exploring the limits of transfer learning with a unified text-to-text transformer," <i>Journal of Machine Learning Research</i>, vol. 21, no. 140, pp. 1–67, 2020.</li>
+                <li>[12] A. Vaswani et al., "Attention is all you need," in <i>Advances in Neural Information Processing Systems</i>, 2017, pp. 5998–6008.</li>
+                <li>[13] Y. Liu, "Fine-tune BERT for extractive summarization," <i>arXiv preprint arXiv:1903.10318</i>, 2019.</li>
+                <li>[14] C.-Y. Lin, "ROUGE: A package for automatic evaluation of summaries," in <i>Text Summarization Branches Out</i>, 2004, pp. 74–81.</li>
+                <li>[15] K. Papineni et al., "BLEU: a method for automatic evaluation of machine translation," in <i>Proceedings of ACL</i>, 2002, pp. 311–318.</li>
+                <li>[16] T. Zhang et al., "BERTScore: Evaluating text generation with BERT," in <i>International Conference on Learning Representations</i>, 2020.</li>
+                <li>[17] X. Xu et al., "Abstractive text summarization with history attention and transfer learning," <i>Neural Networks</i>, vol. 142, pp. 234–246, 2021.</li>
+                <li>[18] I. Beltagy, M. Peters, and A. Cohan, "Longformer: The long-document transformer," <i>arXiv preprint arXiv:2004.05150</i>, 2020.</li>
+                <li>[19] M. Zaheer et al., "Big Bird: Transformers for longer sequences," in <i>Advances in Neural Information Processing Systems</i>, 2020.</li>
+            </ol>
+            
+            <div class="page-number">1</div>
+        </div>
+    </div>
+</body>
+</html>
