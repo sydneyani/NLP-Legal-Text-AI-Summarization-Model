@@ -1,41 +1,58 @@
-# Dataset folders
+# Legal corpora. Download from Zenodo and keep them out of git.
+# See dataset/README.md.
 UK-Abs/
 IN-Ext/
 IN-Abs/
 
+# Generated training artifacts
+outputs/
+checkpoints/
+wandb/
+mlruns/
 
-# Python virtual environment
-venv/
+# Model weights
+*.pt
+*.pth
+*.h5
+*.ckpt
+*.model
+*.safetensors
+*.bin
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
 
-# Distribution / packaging
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Packaging
 dist/
 build/
 *.egg-info/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Environments
+# Secrets and local environment files
 .env
-.venv
-env/
-ENV/
+.env.*
+*.pem
+credentials.json
+secrets.json
 
-# Model checkpoint files
-*.pt
-*.pth
-*.h5
-*.model
-
-# IDE specific files
+# IDE and OS
 .idea/
 .vscode/
 *.swp
 *.swo
-
-# OS specific files
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
