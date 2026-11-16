@@ -1,6 +1,6 @@
 # Legal Case Document Summarization Dataset
 
-This folder contains the dataset used for the AI-Powered Legal Document Summarization project. The dataset was obtained from the paper "Legal Case Document Summarization: Extractive and Abstractive Methods and their Evaluation" accepted at AACL-IJCNLP 2022.
+This folder documents the corpus used by the legal summarization project. The text files themselves are not stored in the repository. The dataset was released with the paper "Legal Case Document Summarization: Extractive and Abstractive Methods and their Evaluation" (AACL-IJCNLP 2022). Setup, training, and reported scores are in the project [README](../README.md).
 
 ## Dataset Overview
 
@@ -69,14 +69,13 @@ From our analysis of the combined dataset:
 - **Average summary length**: 4,996.06 characters (approximately 32.91 sentences)
 - **Compression ratio**: 0.2252 (summary length / document length)
 
-## Usage in Our Project
+## Usage in this repository
 
-For our AI-Powered Legal Document Summarization project, we've:
+`data_utils.py` walks `UK-Abs`, `IN-Abs`, and `IN-Ext`. It keeps a pair when a `judgement/` directory and a `summary/` directory share a parent and contain the same filename. Nested summary folders such as `summary/full/A1/` sit below that match, so the two-expert and segment-wise files load after they are placed in a flat `summary/` directory next to `judgement/`.
 
-1. Loaded all document-summary pairs from the three datasets
-2. Preprocessed the text by removing excessive whitespace and filtering out very short documents/summaries
-3. Split the data into train (80%), validation (10%), and test (10%) sets
-4. Used the dataset to train and evaluate both extractive (BERTSUM) and abstractive (T5) summarization models
+Preprocessing collapses whitespace and drops a pair when the document is shorter than 50 characters or the summary is shorter than 10 characters. The remaining rows are split 80/10/10 with `random_state=42`. That split pools every loaded pair. It does not keep the official IN-Abs and UK-Abs test sets of 100 cases.
+
+Download the corpus from [Zenodo record 7152317](https://zenodo.org/records/7152317) and place the three top-level folders at the repository root. Those folders are listed in `.gitignore`.
 
 ## Citation
 
