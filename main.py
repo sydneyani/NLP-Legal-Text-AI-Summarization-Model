@@ -338,8 +338,6 @@ def main():
     t5_summarizer = None
     bertsum_extractor = None
     
-    # Replace the existing Step 3a section in main.py with this code
-    
     if args.mode in ['t5', 'both']:
         print("\nStep 3a: Initializing T5 Abstractive model...")
         try:
@@ -366,6 +364,15 @@ def main():
         except Exception as e:
             print(f"Error initializing T5 model: {e}")
             t5_summarizer = None
+
+    if args.mode in ['bertsum', 'both']:
+        print("\nStep 3b: Initializing BERTSUM Extractive model...")
+        try:
+            bertsum_extractor = BERTSumExtractor(model_name=args.bert_model)
+            print("BERTSUM model initialized successfully")
+        except Exception as e:
+            print(f"Error initializing BERTSUM model: {e}")
+            bertsum_extractor = None
     
     # Step 4: Training models (if not eval_only)
     if not args.eval_only:
