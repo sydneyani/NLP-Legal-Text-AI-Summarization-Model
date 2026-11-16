@@ -7,9 +7,18 @@ import sys
 import os
 import importlib.util
 
+# Pip distribution names that do not match the importable module.
+MODULE_NAMES = {
+    "scikit-learn": "sklearn",
+    "rouge-score": "rouge_score",
+    "bert-score": "bert_score",
+}
+
+
 def check_package(package_name):
     """Check if a package is installed."""
-    return importlib.util.find_spec(package_name) is not None
+    module_name = MODULE_NAMES.get(package_name, package_name)
+    return importlib.util.find_spec(module_name) is not None
 
 def install_package(package_name, version=None):
     """Install a package using pip."""
