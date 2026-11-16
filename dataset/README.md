@@ -69,14 +69,16 @@ From our analysis of the combined dataset:
 - **Average summary length**: 4,996.06 characters (approximately 32.91 sentences)
 - **Compression ratio**: 0.2252 (summary length / document length)
 
-## Usage in Our Project
+## Usage in this repository
 
-For our AI-Powered Legal Document Summarization project, we've:
+`data_utils.py` is the loader used by `main.py`.
 
-1. Loaded all document-summary pairs from the three datasets
-2. Preprocessed the text by removing excessive whitespace and filtering out very short documents/summaries
-3. Split the data into train (80%), validation (10%), and test (10%) sets
-4. Used the dataset to train and evaluate both extractive (BERTSUM) and abstractive (T5) summarization models
+1. `load_data()` walks `UK-Abs/`, `IN-Ext/`, and `IN-Abs/`. It pairs files that share a filename and sit directly inside sibling `judgement/` and `summary/` directories. Nested summaries (`summary/full/A1`, `summary/segment-wise/`, and the UK test `summary/full/` tree) are not paired.
+2. `preprocess_data()` collapses whitespace and drops documents of 50 characters or fewer and summaries of 10 characters or fewer.
+3. The remaining rows are split 80% train, 10% validation, and 10% test with `random_state=42`. Fewer than 6 rows cannot form that split, so those rows are reused for all three sets. That is the path taken by the built-in sample in `main.py`.
+4. `analyze_dataset()` prints character and sentence lengths and writes `dataset_analysis.png` at the repository root.
+
+The statistics above are the analysis recorded with this project. The three published collections sum to 7,973 pairs, and the recorded analysis has 7,823. The raw files are not in the repository, so that difference cannot be reconstructed from this tree. Training and evaluation are documented in the [root README](../README.md).
 
 ## Citation
 
