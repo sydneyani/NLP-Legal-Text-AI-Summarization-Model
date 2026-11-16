@@ -1,41 +1,54 @@
-# Dataset folders
+# Source corpus. Download from Zenodo and keep it out of git.
+# See dataset/README.md.
 UK-Abs/
 IN-Ext/
 IN-Abs/
 
-
-# Python virtual environment
-venv/
-__pycache__/
-*.py[cod]
-*$py.class
-
-# Distribution / packaging
-dist/
-build/
-*.egg-info/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Environments
-.env
-.venv
-env/
-ENV/
-
-# Model checkpoint files
+# Training runs, checkpoints, and plots produced by main.py
+outputs/
+checkpoints/
+wandb/
+runs/
 *.pt
 *.pth
 *.h5
+*.ckpt
+*.bin
+*.onnx
+*.safetensors
 *.model
 
-# IDE specific files
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+env/
+ENV/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Tool caches
+.cache/
+.huggingface/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+
+# Secrets and local configuration
+.env
+.env.*
+*.pem
+secrets.json
+
+# Editors and OS files
 .idea/
 .vscode/
 *.swp
 *.swo
-
-# OS specific files
 .DS_Store
 Thumbs.db
