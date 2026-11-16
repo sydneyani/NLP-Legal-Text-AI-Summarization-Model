@@ -111,7 +111,18 @@ def preprocess_data(df):
     df = df.dropna(subset=['document', 'summary'])
     df = df[df['document'].str.len() > 50]  # Remove very short documents
     df = df[df['summary'].str.len() > 10]   # Remove very short summaries
-    
+    df = df.reset_index(drop=True)
+
+    # An 80/10/10 split needs at least 6 rows: the 20% holdout must itself
+    # contain a validation row and a test row. The built-in 3-row sample
+    # cannot form that split, so reuse it for all three sets.
+    if len(df) < 6:
+        print(
+            f"Only {len(df)} document-summary pairs remain after cleaning. "
+            "Reusing those rows for train, validation, and test."
+        )
+        return df.copy(), df.copy(), df.copy()
+
     # Split into train, validation, and test sets (80%, 10%, 10%)
     train_df, temp_df = train_test_split(df, test_size=0.2, random_state=42)
     val_df, test_df = train_test_split(temp_df, test_size=0.5, random_state=42)
